@@ -1,0 +1,19 @@
+.signin{
+    border: 5px solid rgb(248, 246, 246);
+    border-radius: 20px;
+    width:600px;
+    height:320px;
+    background-color: #a2b6f3;
+    opacity: 2.5;
+}
+.Signinparent{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin:200px;
+   
+}
+
+body{
+    background-color: #c5c3f6;
+}

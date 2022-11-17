@@ -1,0 +1,17 @@
+.signup{
+    border: 5px solid rgb(248, 246, 246);
+    border-radius: 20px;
+    width:600px;
+    height:320px;
+    background-color: #e1e3f8;
+    opacity: 2.5;
+}
+.Signupparent{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin:200px;
+   
+}
+
+
