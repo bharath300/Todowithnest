@@ -5,23 +5,22 @@ import { Repository } from 'typeorm';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { User } from './entities/user.entity';
-import {JwtService} from '@nestjs/jwt'
 import * as bcrypt from "bcrypt"
 
 @Injectable()
 export class UserService {
   constructor(@InjectRepository(User)
-    private userRepo: Repository <User>, private readonly jwtService:JwtService){
+    private userRepo: Repository <User>){
 
   }
   async create(createUserDto: CreateUserDto) {
     const salt=await bcrypt.genSalt()
     const hashedpwd=await bcrypt.hash(createUserDto.password,salt)
     const user=this.userRepo.create({UserName:createUserDto.UserName, password:hashedpwd});
-
-    return await this.userRepo.save(user).catch(() => {
+    await this.userRepo.save(user).catch(() => {
       throw new DBException();
     });
+    return  { message: 'success' };
   }
   
   async findAll() {
@@ -31,13 +30,15 @@ export class UserService {
   }
 
   async findusername(username:any){
-    return await this.userRepo.findOne({where: { UserName: username}})
+    return await this.userRepo.findOne({where: { UserName: username}}).catch(() => {
+      throw new DBException();
+    });
   }
 
   findOne(itemid: number) {
     return this.userRepo.findOne({ where: { id: itemid } , relations: ['notes']}).catch(() => {
       throw new DBException();
-    });;
+    });
   }
 
  async update(id: number, updateUserDto: UpdateUserDto) {

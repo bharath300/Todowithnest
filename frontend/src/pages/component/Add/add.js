@@ -1,4 +1,4 @@
-import { useState, useRef} from "react";
+import { useState, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import { Button } from "@mui/material";
 import List from "../List/list";
@@ -11,24 +11,23 @@ function Add() {
   const [fetchflag, setFetchflag] = useState(false);
   const textRef = useRef("");
 
-  const IDval=JSON.parse(localStorage.getItem("id"))
+  const IDval = JSON.parse(localStorage.getItem("id"));
   const submitForm = async () => {
-    if ( textRef.current.value===""){
+    if (textRef.current.value === "") {
       alert("try again");
-    }
-    else{
-    const requesthandler = {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ name: val, user: IDval}),
-    };
+    } else {
+      const requesthandler = {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ name: val, user: IDval }),
+      };
 
-    await fetch("/notes/add", requesthandler).then((response) =>
-      response.json()
-    );
-    setFetchflag(!fetchflag);
-  setval(" ");
-  }
+      await fetch("/notes/add", requesthandler).then((response) =>
+        response.json()
+      );
+      setFetchflag(!fetchflag);
+      setval(" ");
+    }
   };
 
   async function logout() {
@@ -40,7 +39,6 @@ function Add() {
     localStorage.clear();
     navigate("/signin");
   }
-
 
   return (
     <>
@@ -68,8 +66,11 @@ function Add() {
         </div>
       </div>
 
-      <List 
-      reference={textRef} fetchflag={fetchflag} setFetchflag={setFetchflag}></List>
+      <List
+        reference={textRef}
+        fetchflag={fetchflag}
+        setFetchflag={setFetchflag}
+      ></List>
     </>
   );
 }

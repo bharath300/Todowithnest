@@ -7,15 +7,13 @@ function List(props) {
   const [indexval, setIndex] = useState(0);
   const [flag, setFlag] = useState(false);
 
-  const { 
-     reference, fetchflag, setFetchflag } = props;
+  const { reference, fetchflag, setFetchflag } = props;
   const IDval = JSON.parse(localStorage.getItem("id"));
 
   async function deletes(index) {
     const requesthandler = {
       method: "DELETE",
       headers: { "Content-Type": "application/json" },
-
     };
 
     await fetch("/notes/" + index, requesthandler)
@@ -49,7 +47,6 @@ function List(props) {
       setFetchflag(!fetchflag);
       setFlag(false);
       reference.current.value = " ";
-    
     }
   }
 
