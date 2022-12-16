@@ -2,32 +2,36 @@ import { Button, Link } from "@mui/material";
 import TextField from "@mui/material/TextField";
 import { useNavigate } from "react-router-dom";
 import { useState} from 'react';
+import Cookies from 'js-cookie';
 import "./signin.css";
 
 function Signin() {
   const navigate = useNavigate();
-  const [value, setusername] = useState("");
-  const [idval, setid] = useState("");
+  const [username, setusername] = useState("");
   const [password, setpassword] = useState("");
 
-  function submitform() {
-    if((value==="") || (password ==="")){
+  async function submitform() {
+    if((username==="") || (password ==="")){
       alert("please enter valid input")
     }
     else{
-    localStorage.setItem("flag", true);
-
     const requesthandler = {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ UserName:value, password:password }),
+      body: JSON.stringify({ UserName:username, password:password }),
     };
-    fetch('user/check', requesthandler).then((res)=>res.json()
-    
-    ).then((idval) => {
-      if(idval){
-        setid(idval);
-      localStorage.setItem('id',idval)
+
+    fetch('user/check', requesthandler).then(res=>res.json()).then(async (data) => {
+      
+      if(data.message==="success"){
+      
+        const cookie=await fetch('user/session',
+        {
+          headers: { 'Authorization': `Bearer ${Cookies.get('Auth_token')}` }
+        });
+        const cookieResult=await cookie.json();
+      localStorage.setItem("id",cookieResult.id)
+      localStorage.setItem("flag", true);
       navigate("/add");
       }
       else
@@ -37,16 +41,9 @@ function Signin() {
       
     });
 
-
 }
   }
 
-
-
-  function move() {
-    navigate("/");
-
-  }
 
   return (
     <>
@@ -77,7 +74,7 @@ function Signin() {
             Submit
           </Button>
           <br></br>
-          <Link onClick={move}>Not a user?</Link>
+          <Link onClick={()=> navigate("/")}>Not a user?</Link>
         </div>
       </div>
     </>

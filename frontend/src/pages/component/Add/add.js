@@ -1,4 +1,4 @@
-import { useState, useRef, useEffect } from "react";
+import { useState, useRef} from "react";
 import { useNavigate } from "react-router-dom";
 import { Button } from "@mui/material";
 import List from "../List/list";
@@ -7,7 +7,7 @@ import "./add.css";
 function Add() {
   const navigate = useNavigate();
   const [val, setval] = useState("");
-  const [data, setdata] = useState([]);
+
   const [fetchflag, setFetchflag] = useState(false);
   const textRef = useRef("");
 
@@ -31,13 +31,16 @@ function Add() {
   }
   };
 
-  function logout() {
-    localStorage.setItem("flag", false);
-
-    navigate("/");
+  async function logout() {
+    const requestOptions = {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+    };
+    await fetch("/user/logout", requestOptions);
+    localStorage.clear();
+    navigate("/signin");
   }
 
-  
 
   return (
     <>
@@ -65,7 +68,8 @@ function Add() {
         </div>
       </div>
 
-      <List list={data} setdata={setdata} reference={textRef} fetchflag={fetchflag} setFetchflag={setFetchflag}></List>
+      <List 
+      reference={textRef} fetchflag={fetchflag} setFetchflag={setFetchflag}></List>
     </>
   );
 }

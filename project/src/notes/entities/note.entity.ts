@@ -9,11 +9,9 @@ export class Note {
     @Column()
     name: string;
 
-    // @Column()
-    // userid: number;
-    @ManyToOne(type => User, user => user.notes)
+    @ManyToOne(()=> User, user => user.notes, {onDelete: "CASCADE"})
     @JoinColumn({name:'userId'})
-  user: User;
+    user: User;
 
   
 }

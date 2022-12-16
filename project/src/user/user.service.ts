@@ -1,46 +1,55 @@
-import { Get, Injectable } from '@nestjs/common';
+import {Injectable, Logger } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
+import DBException from 'src/exceptions/db.exception';
 import { Repository } from 'typeorm';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { User } from './entities/user.entity';
+import {JwtService} from '@nestjs/jwt'
+import * as bcrypt from "bcrypt"
 
 @Injectable()
 export class UserService {
   constructor(@InjectRepository(User)
-    private userRepo: Repository <User>,){
+    private userRepo: Repository <User>, private readonly jwtService:JwtService){
 
   }
   async create(createUserDto: CreateUserDto) {
-    const user=this.userRepo.create(createUserDto);
-    return await this.userRepo.save(user);
+    const salt=await bcrypt.genSalt()
+    const hashedpwd=await bcrypt.hash(createUserDto.password,salt)
+    const user=this.userRepo.create({UserName:createUserDto.UserName, password:hashedpwd});
+
+    return await this.userRepo.save(user).catch(() => {
+      throw new DBException();
+    });
   }
   
-  findAll() {
-    return this.userRepo.find();
+  async findAll() {
+    return await this.userRepo.find().catch(() => {
+      throw new DBException();
+    });
   }
 
-  async finduser(createUserDto: CreateUserDto) {
-    const note = await this.userRepo.findOne({ where: { UserName: createUserDto.UserName, password:createUserDto.password }});
-    if(!note){
-      return false;
-    }
-    return note.id;
+  async findusername(username:any){
+    return await this.userRepo.findOne({where: { UserName: username}})
   }
-
 
   findOne(itemid: number) {
-    return this.userRepo.findOne({ where: { id: itemid } , relations: ['notes']});
-    // return `This action returns a #${id} user`;
+    return this.userRepo.findOne({ where: { id: itemid } , relations: ['notes']}).catch(() => {
+      throw new DBException();
+    });;
   }
 
  async update(id: number, updateUserDto: UpdateUserDto) {
-
-    return await this.userRepo.update(id,updateUserDto)
+    return await this.userRepo.update(id,updateUserDto).catch(() => {
+      throw new DBException();
+    });
     
   }
 
-  remove(id: number) {
-    return this.userRepo.delete({id});
+  async remove(id: number) {
+    return await this.userRepo.delete({id}).catch(() => {
+      throw new DBException();
+    });;
   }
 }

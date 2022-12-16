@@ -13,7 +13,7 @@ export class User {
   @Column()
   password: string;
 
-  @OneToMany(type => Note, note => note.user)
+  @OneToMany(() => Note, note => note.user)
   @JoinColumn({name: 'notes'})
   notes: Note[];
 

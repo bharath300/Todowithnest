@@ -32,12 +32,12 @@ export class NotesController {
     return this.notesService.findOne(user1);
   }
 
-  @Patch('edit/:id')
+  @Patch(':id')
   update(@Param('id') id: string, @Body() updateNoteDto: UpdateNoteDto) {
     return this.notesService.update(+id, updateNoteDto);
   }
 
-  @Delete('delete/:id')
+  @Delete(':id')
   remove(@Param('id') id: string) {
     return this.notesService.remove(+id);
   }

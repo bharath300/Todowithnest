@@ -5,11 +5,12 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { Note } from './entities/note.entity';
 import { UserService } from 'src/user/user.service';
 import { User } from 'src/user/entities/user.entity';
+import {JwtService} from '@nestjs/jwt'
 
 
 @Module({
   imports: [TypeOrmModule.forFeature([Note,User])],
   controllers: [NotesController],
-  providers: [NotesService,UserService]
+  providers: [NotesService,UserService,JwtService]
 })
 export class NotesModule {}

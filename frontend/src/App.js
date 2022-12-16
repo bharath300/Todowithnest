@@ -6,11 +6,11 @@ import Notfound from "./pages/Notfound/Notfound";
 import Register from "./pages/Register/register";
 
 const ProtectedRoute = ({ children }) => {
-  const flagval = JSON.parse(localStorage.getItem("flag"));
-  if (flagval === true) {
+  const loginflag = JSON.parse(localStorage.getItem("flag"));
+  if (loginflag === true) {
     return children;
   }
-  return <h1>No Access</h1>;
+  return <Notfound/>;
 };
 
 function App() {

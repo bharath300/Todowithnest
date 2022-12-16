@@ -4,7 +4,6 @@ import { useNavigate } from "react-router-dom";
 import { useState} from 'react';
 import "./register.css";
 
-
 function Register() {
   const navigate = useNavigate();
   const [value, setusername] = useState("");
@@ -15,7 +14,7 @@ function Register() {
       alert("please enter valid input")
     }
     else{
-    localStorage.setItem("flag", true);
+  
     const requesthandler = {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -27,12 +26,6 @@ function Register() {
     navigate("/signin");
 }
   }
-
-  function move() {
-    navigate("/signin");
-
-  }
-
 
   return (
     <>
@@ -63,7 +56,7 @@ function Register() {
             Sign-up
           </Button>
           <br></br>
-          <Link onClick={move}>Already a user ?</Link>
+          <Link onClick={()=> navigate("/signin")}>Already a user ?</Link>
         </div>
       </div>
     </>

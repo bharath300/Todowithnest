@@ -3,9 +3,8 @@
     align-items: center;
     justify-content: center;
     border: none;
-    border-bottom: 1px solid rgb(112, 112, 255);
+    border-bottom: 1px solid rgb(13, 13, 20);
     border-width:2px;
-    /* width:1500px; */
     border-radius: 10px;
     width: 400px;
     height:40px;
@@ -25,7 +24,6 @@
 
 
 .cover{
-    /* width:750px; */
     display: flex;
     justify-content: center;
     align-items: center;
@@ -37,12 +35,11 @@
 }
 
 .main-container {
-    /* height: 100vh; */
     display: flex;
     justify-content: center;
     align-items: center;
 }
-.bttn{
+.btn-container{
     padding: 10px;
 }
 

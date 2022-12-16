@@ -1,5 +1,6 @@
-import { Injectable } from '@nestjs/common';
+import { HttpStatus, Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
+import DBException from 'src/exceptions/db.exception';
 import { User } from 'src/user/entities/user.entity';
 
 import { Repository } from 'typeorm';
@@ -14,25 +15,36 @@ export class NotesService {
     private NoteRepo: Repository<Note>,
   ) {}
   async create(createNoteDto: CreateNoteDto, ID: User) {
-    const note = this.NoteRepo.create({ name: createNoteDto.name, user: ID });
-    return await this.NoteRepo.save(note);
+    const note = await this.NoteRepo.create({
+      name: createNoteDto.name,
+      user: ID,
+    })
+    return await this.NoteRepo.save(note).catch(() => {
+      throw new DBException();
+    });
   }
 
-
-
-  findAll() {
-    return this.NoteRepo.find();
+  async findAll() {
+    return await this.NoteRepo.find().catch(() => {
+      throw new DBException();
+    });
   }
 
   async findOne(user: User) {
-    return this.NoteRepo.find({ where: { user: user } });
+    return await this.NoteRepo.find({ where: { user: user } }).catch(() => {
+      throw new DBException();
+    });
   }
 
   async update(id: number, updateNoteDto: UpdateNoteDto) {
-    return await this.NoteRepo.update({ id: id }, { name: updateNoteDto.name });
+    return await this.NoteRepo.update({ id: id }, { name: updateNoteDto.name }).catch((error) => {
+      throw new NotFoundException(error.message);
+    });
   }
 
-  remove(id: number) {
-    return this.NoteRepo.delete({ id });
+  async remove(id: number) {
+    return await this.NoteRepo.delete({ id }).catch(() => {
+      throw new DBException();
+    });
   }
 }
